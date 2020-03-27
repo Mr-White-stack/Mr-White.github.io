@@ -1,0 +1,499 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title id="titleBar">ETAP Ley configurator</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="description" content="ETAP Ley Configurator" />
+        <meta name="keywords" content="Ley, ETAP, Lighting, configurator"/>
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+
+        
+        <link rel="stylesheet" href="css/style.css" type="text/css" media="screen"/>
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+        <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+        <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="gui.js"></script>
+        <script type="text/javascript" src="tool.js"></script>
+        <!-- <script type="text/javascript" src="gui.min.js"></script>
+        <script type="text/javascript" src="tool.min.js"></script> -->
+        <script type="text/javascript" src="konva.min.js"></script>
+        <script type="text/javascript" src="jspdf.min.js"></script>
+        <!-- <script src="https://unpkg.com/konva@2.4.2/konva.min.js"></script> -->
+        <!-- <script src="https://unpkg.com/konva@3.1.0/konva.js"></script> -->
+        <!-- <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script> -->
+        <!-- <script type="text/javascript" src="https://cdn.rawgit.com/prashantchaudhary/ddslick/master/jquery.ddslick.min.js" ></script> -->
+        
+        <!-- Favicons -->
+        <link rel="apple-touch-icon" sizes="57x57" href="images/favicons/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="images/favicons/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="images/favicons/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="images/favicons/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="images/favicons/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="images/favicons/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="images/favicons/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="images/favicons/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="images/favicons/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192"  href="images/favicons/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicons/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="images/favicons/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="images/favicons/favicon-16x16.png">
+        <link rel="manifest" href="images/favicons/manifest.json">
+        <meta name="msapplication-TileColor" content="#ffffff">
+        <meta name="msapplication-TileImage" content="images/favicons/ms-icon-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+            /* Chrome, Safari, Edge, Opera */
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+            }            
+            /* Firefox */
+            input[type=number] {
+              -moz-appearance:textfield;
+            }        
+        </style>
+    </head>
+    <body>
+        <div id="content">
+            <h1 id="contentTitle">ETAP Ley configurator</h1>
+            <div id="wrapper">
+                <div id="steps" class="steps">
+                    <form id="formElem" name="formElem" action="" method="post">                     
+                        
+                        <!-- Project Definitions -->
+                        <fieldset class="step">
+                        <div class="form-group">
+                        
+                            <legend id="stepTitle_0" >Project Definition</legend>
+                            <div id="stepDesc_0" class="txtbox">
+                                Create light lines with Ley, the modular lighting system. Draw your own personalized configuration here. 
+                                Choose short or long lines, straight or angled, with or without uplight, suspended, ceiling mounted or wall mounted… 
+                                The possibilities are endless!
+                                <br><br>
+                                <!-- Please fill in the projet data -->
+                                Please fill in the project information
+                            </div>
+                            <!--  Left Pane -->
+                            <div class="col-md-6" id = "leftPane" >
+                                <p style="font-weight: bold;"><label id="projLabel">Project</label></p>
+                                <p>
+                                    <label class="col-md-2 control-label" for="pname" id="pname_lbl">Name</label>
+                                    <input style = "background: #ffffff" id="pname" name="pname" type="text" AUTOCOMPLETE=OFF />
+                                </p>                                                    
+                                <p>
+                                    <label class="col-md-2 control-label" for="proom" id="proom_lbl">Room</label>
+                                    <input style = "background: #ffffff" id="proom" name="proom" type="text" placeholder="e.g. Main Hall" AUTOCOMPLETE=OFF maxlength = "11"/>
+                                </p>
+                                <p>
+                                    <label class="col-md-2 control-label" for="paddr" id="paddr_lbl">Address</label class="col-md-2 control-label">
+                                    <input style = "background: #ffffff" id="paddr" name="paddr" type="text" AUTOCOMPLETE=OFF />
+                                </p>
+                                <p>
+                                    <label class="col-md-2 control-label" for="date" id="date_lbl">Date</label>
+                                    <input id="date" name="date" type="text" disabled/>
+                                </p>
+
+                            </div>
+                            <!--  Right Pane -->
+                            <div class="col-md-6" id = "rightPane">
+
+                                <p style="font-weight: bold;"><label id="contactLabel">Contact</label></p>
+                                <p>
+                                    <label class="col-md-2 control-label" for="cname" id="cname_lbl">Name</label>
+                                    <input id="cname" name="cname" type="text" AUTOCOMPLETE=OFF />
+                                </p>
+                                <p>
+                                    <label class="col-md-2 control-label" for="email" id="email_lbl">E-mail</label>
+                                    <input id="email" class = "email" name="email" placeholder="e.g. mail@mail.com" AUTOCOMPLETE=OFF onBlur="checkEmail(this.value)"/>
+
+                                </p>
+                                <p>
+                                    <label class="col-md-2 control-label" for="phone" id="phone_lbl">Phone</label>
+                                    <input id="phone" name="phone" placeholder="e.g. +3233100211" type="number" onkeydown="return event.keyCode !== 69" AUTOCOMPLETE=OFF/>
+                                </p>
+                                <p>
+                                    <label class="col-md-2 control-label" for="caddr" id="caddr_lbl">Address</label>
+                                    <input id="caddr" name="caddr" type="text" AUTOCOMPLETE=OFF />
+                                </p>
+                                <p>
+                                    <label class="col-md-2 control-label" for="country" id="country_lbl">Country</label>
+                                    <select id="country" name="country">
+                                        <option value='blank' disabled selected value> </option>
+                                        <option value='be' id="country_op0">Belgium</option>
+                                        <option value='lu' id="country_op1">Luxembourg</option>
+                                        <option value='fr' id="country_op2">France</option>
+                                        <option value='de' id="country_op3">Germany</option>
+                                        <option value='nl' id="country_op4">The Netherlands</option>
+                                        <option value='pt' id="country_op5">Portugal</option>
+                                        <option value='es' id="country_op6">Spain</option>
+                                        <option value='se' id="country_op7">Sweden</option>
+                                        <option value='other' id="country_op8">Other</option>
+                                    </select>
+                                    <!-- <select id="country" name="country">
+                                        <option value=0><img class="flag" src="images/countries/be.svg" alt="Belgium Flag"><span id="country_op0">Belgium</span></option>
+                                        <option value=1><img class="flag" src="images/countries/lu.svg" alt="Belgium Flag"><span id="country_op1">Luxembourg</span></option>
+                                        <option value=2><img class="flag" src="images/countries/fr.svg" alt="Belgium Flag"><span id="country_op2">France</span> </option>
+                                        <option value=3><img class="flag" src="images/countries/de.svg" alt="Belgium Flag"><span id="country_op3">Germany</span></option>
+                                        <option value=4><img class="flag" src="images/countries/nl.svg" alt="Belgium Flag"><span id="country_op4">The Netherlands</span></option>
+                                        <option value=5><img class="flag" src="images/countries/pt.svg" alt="Belgium Flag"><span id="country_op5">Portugal</span></option>
+                                        <option value=6><img class="flag" src="images/countries/es.svg" alt="Belgium Flag"><span id="country_op6">Spain</span></option>
+                                        <option value=7><img class="flag" src="images/countries/se.svg" alt="Belgium Flag"><span id="country_op7">Sweden</span></option>
+                                        <option value=8><span id="country_op8">Other</span></option>
+                                    </select> -->
+                                </p>
+                            </div>
+                            
+                        </div>
+                            <!-- <p>
+                                <label for="pname">Project Name</label>
+                                <input id="pname" name="pname" type="text" AUTOCOMPLETE=OFF />
+                            </p>
+                            <p>
+                                <label for="date">Date</label>
+                                <input id="date" name="date" type="text" disabled/>
+                            </p>                            
+                            <p>
+                                <label for="cname">Client Name</label>
+                                <input id="cname" name="cname" type="text" AUTOCOMPLETE=OFF />
+                            </p>
+                            <p>
+                                <label for="country">Country</label>
+                                <input id="country" name="country" type="text" AUTOCOMPLETE=OFF />
+                            </p>
+                            <p>
+                                <label for="phone">Phone</label>
+                                <input id="phone" name="phone" placeholder="e.g. +351215555555" type="tel" AUTOCOMPLETE=OFF />
+                            </p>
+                            <p>
+                                <label for="email">E-mail</label>
+                                <input id="email" name="email" placeholder="e.g. mail@mail.com" type="email" AUTOCOMPLETE=OFF />
+                            </p> -->
+                        </fieldset>
+
+
+
+
+
+
+                        <!-- Line Definitions -->
+                        <fieldset class="step">
+                            <legend id="stepTitle_1">Line Definition</legend>
+                            <div id="stepDesc_1" class="txtbox">
+                                Select the different characteristics of your light line
+                            </div>
+                            <div class="col-md-12" style="margin-left: 100px">
+                                <p>
+                                    <label class="col-md-1 control-label" id="installation_lbl" for="installation">Installation</label>
+                                    <select id="installation" name="installation" >
+                                        <option id="installation_op0" value=0 >Ceiling Mounted</option>
+                                        <option id="installation_op1" value=1>Wall Mounted</option>
+                                        <option id="installation_op2" value=2 selected>Suspended</option>
+                                        <!-- <option disabled value=3>Recessed</option> -->
+                                    </select>
+                                    <!-- Suspension type || tiny select box, need to center in the resize -->
+                                    <label class="col-md-1 control-label" id="susLength_lbl" for="susLength" style="margin-left: 20px;">Suspension Type:</label>
+                                    <select id="susLength" name="susLength">
+                                        <optgroup id="susLength_gr0" label="Power Supply Box">
+                                            <option value=1 selected>1500 mm</option>
+                                            <option value=2>3000 mm</option>
+                                            <option id="susLen_op0" value=0>other</option>
+                                        </optgroup>
+                                        <optgroup id="susLength_gr1" label="Minimalistic">
+                                            <option value=3>1500 mm</option>
+                                            <option value=4>3000 mm</option>
+                                            <option id="susLen_op5" value=5>other</option>
+                                        </optgroup>
+                                    </select>
+                                    <input id="otherSusLen" name="otherSusLen" type="number" style="display: none" min="500" max="10000" value="5000"/>
+                                    <span id="otherSusLenLabel2" style="display: none">mm</span>
+                                </p>
+                                <p>
+                                    <label class="col-md-1 control-label" id="color_lbl" for="color">Colour</label>
+                                    <select id="color" name="color">
+                                        <option id="color_op0" value=0 selected>RAL 9003 Signal White (Textured)</option>
+                                        <option id="color_op1" value=1>RAL 9005 Jet Black (Textured)</option>
+                                        <option id="color_op2" value=2>RAL 9006 White Aluminium (Textured)</option>
+                                        <option id="color_op3" value=3>Other</option>
+                                        <!-- TODO: choose between samples ? -->
+                                    </select>
+                                    <label class="col-md-1 control-label" id="otherColorLabel" for="otherColor" style="display: none; margin-left: 20px;">RAL:</label>
+                                    <input id="otherColor" name="otherColor" type="text" maxlength="4" style="display: none; margin-left: 0px;"/>
+                                    <span id="otherColorLabel2" style="display: none">Matte textured powder coating</span>
+                                    <!-- TODO: put ral color picker ? -->
+                                </p>
+                                <p>
+                                    <label  class="col-md-1 control-label" id="ledcolor_lbl" for="ledcolor">LED Colour</label>
+                                    <select id="ledcolor" name="ledcolor">
+                                        <option value=0 selected>3000K</option>
+                                        <option value=1>4000K</option>
+                                    </select>
+                                </p>
+                                <!-- <p>
+                                    <label for="ballast">Driver</label>
+                                    <select id="ballast" name="ballast">
+                                        <option value=0 selected>Static</option>
+                                        <option value=1>DALI</option>
+                                    </select>
+                                </p> -->
+                                <p>
+                                    <label class="col-md-1 control-label" id="optics_lbl" for="optics">Optics</label>
+                                    <select id="optics" name="optics">
+                                        <optgroup id="optics_gr0" label="Diffuser">
+                                            <option id="optics_op0" value=0 selected>Opal diffuser</option>
+                                            <!-- <option id="optics_op1" disabled value=1>Low luminance diffuser</option> -->
+                                        </optgroup>
+                                        <optgroup id="optics_gr1" label="Shielded lens">
+                                            <option id="optics_op2" value=2>White shielded unit</option>
+                                            <option id="optics_op3" value=3>Black shielded unit</option>
+                                        </optgroup>
+                                    </select>
+                                    <!-- Beam & Material  || What is the beam?-->
+                                    <label id="beamLabel" for="beam" style="display: none">Beam:</label>
+                                    <select id="beam" name="beam" style="display: none">
+                                        <option id="beam_op0" value=0 selected>Medium</option>
+                                        <option id="beam_op1" value=1>Very Wide</option>
+                                    </select>
+                                    <!-- Light Output ||  tiny select box, need to center in the resize-->
+                                    <label class="col-md-1 control-label" id="lightOutputLabel" for="lightOutput" style="margin-left: 20px;">Light Output:</label>
+                                    <select  style = "text-align: center;" id="lightOutput" name="lightOutput">
+                                        <option id="lightOutput_op0" value=0 selected>500lx</option>
+                                        <option id="lightOutput_op1" value=1>300lx</option>
+                                    </select>
+                                </p>
+                                <!-- <p>
+                                    <label for="cabling">Cabling</label>
+                                    <select id="cabling" name="cabling">
+                                        <option value=0 selected>5 poles</option>
+                                        <option value=1>9 poles</option>
+                                    </select>
+                                </p> -->
+                            </div>
+                        </fieldset>
+
+
+
+
+
+
+
+
+                        <!-- Line Design -->
+                        <fieldset class="step">
+                            <legend id="stepTitle_2">Line Design</legend>
+                            <div id="stepDesc_2" class="txtbox">
+                                Make a sketch of the required line design. The composition and length of the channels are visible if you draw or adapt the line.
+                            </div>
+
+                            <div id="toolsWrapper" >
+                                <label id='drawtoggle' >
+                                    <input type="radio" id="penToggle" name="mouseToggle" value=0 checked>
+                                    <img src="./images/draw.png">
+                                </label>
+                                <label id='cursortoggle'class="col-md-3">
+                                    <input type="radio" id="selToggle" name="mouseToggle" value=1>
+                                    <img src="./images/cursor.png">
+                                </label>
+                                <div id="sideToolButtons" >
+
+                                    <button type="button" id="delButton"  style="margin-left: 20px; max-width: 100%;">
+                                        <img src="./images/trash.png" alt=""/>
+                                    </button>
+
+                                    <button type="button" id="zoomFitButton" style="margin-left: 20px; max-width: 100%;">
+                                        <img src="./images/zoom_fit.png" alt=""/>
+                                    </button>
+
+                                
+                                </div>
+                                <div id="designConsole" class="form-group">
+                                    <!-- <div id="designDefinitions" class = "col-md-6"></div> -->
+                                    <div id="innerConsole" class = "col-md-12"></div>
+                                </div>
+                            </div>
+                            <div id="designContainer"></div>
+
+                        </fieldset>
+
+
+
+
+
+
+
+
+                        <!-- Line Configuration -->
+                        <fieldset class="step ; form-group">
+                            <legend id="stepTitle_3">Line Configuration</legend>
+                            <div id="stepDesc_3" class="txtbox">
+                                Complete the line details. You can select the desired composition of your line and select the required options.
+                            </div>
+                            <div id="tableWrap" class="col-md-6">
+                                 <div id="tableContainer">
+                                   <div id="tableContainer_inner">
+                                        <table id="channelTable" class="table-dragable"> 
+                                            <thead>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div> 
+                            </div>
+                            <div id="configContainer" class="col-md-6"></div>
+                        </fieldset>
+
+
+
+                        
+                        <!-- Export Data -->
+						<fieldset class="step">
+                            <legend id="stepTitle_4">Export data</legend>
+							<div id="stepDesc_4" class="txtbox">
+                                When everything in the form is correctly filled on 
+                                all the steps, the print pdf and submit buttons will be enabled.
+                                Here is a small text explaining what the will happen when the user submits
+                                 the project.
+                            </div>
+                            <div id="overviewContainer" style="margin-top: 40px;">
+                                <h2 id="pOverview_title"></h2>
+                                <div style="margin-bottom:20px; padding-right: 20px">
+                                    <div id="projectOverview">
+                                        <p id="projName">Name:</p>
+                                        <p id="projRoom">Room:</p>
+                                        <p id="projAddress">Address:</p>
+                                        <p id="projDate">Date:</p>
+                                    </div>
+                                    <div id="contactOverview">
+                                        <p id="contName">Name:</p>
+                                        <p id="contAddress">Address:</p>
+                                        <p id="contCountry">Country:</p>
+                                        <p id="contPhone">Phone:</p>
+                                        <p id="contEmail">E-mail:</p>
+                                    </div>
+                                    <p id="addInfo">Additional information:</p>
+                                    <textarea id="additionalnfo" rows="7" placeholder="optional"></textarea>
+                                </div>
+                                <h2 id="leyTitle">Ley</h2>
+                                <div>
+                                    <p id="housing">Housing: <strong> Aluminium profile</strong></p>
+                                    <p id="total_length">Total length :</p>
+                                    <p id="ley_source">light source :</p>
+                                    <p id="ley_optics">optics : </p>
+                                    <p id="ley_ugr">UGR classification :</p>
+                                    <p id="lumFlux_tot">Total luminous flux:</p>
+                                    <p id="lumFlux_down">Luminous flux downlight: </p>
+                                    <p id="lumFlux_up">Luminous flux uplight: </p>
+                                    <p id="lumEfficacy">Luminous efficacy : </p>                                  
+                                    <p id="LLMF">LLMF:</p>                                
+                                    <!-- <h3>Mechanical Properties</h3> -->
+                                    <p id="ley_color">colour: </p>
+                                    <!-- <h3>Electrical properties </h3> -->
+                                    <p id="ley_driver">Driver:  <strong>DALI dimmable</strong></p>
+                                    <p id="number_of_drivers">Number of drivers: </p>
+                                    <p id="max_drivers">Max. Drivers: </p>
+
+                                    <p id="ley_power">Power: </p>
+                                    <p id="tot_power_ft">Total Power Factor: </p>
+                                    <p id="ley_voltage">Voltage: <strong>230-240V</strong></p>
+                                    <p id="ley_freq">Frequency: <strong>50Hz AC</strong></p>
+                                    <p id="ley_photoSafety" style="margin-bottom:20px">Photobiological safety: <strong>IEC/TR 62778: RG 1</strong></p> 
+                                </div>
+                                <h2 id="components_title"></h2>
+                                <div id="overviewComponents"></div>
+                                <h2 id="tenderTitle"></h2>
+                                <div  class="form-group" style="margin-left: 20px; margin-top: 20px;">
+                                    <textarea readonly class="col-md-12" id="tender" name="tender" style="font-size: small;" rows="10"></textarea>    
+                                </div>
+                            </div>
+                            <div id="exportContainer" style="margin-top: 40px;"></div>
+
+                            <div id="submitPanel" class="col-md-6">
+                                <label id="print">
+                                    <button id="printButton" type="button">
+                                        <span id = "printPopup" class="popup"></span>
+                                        <img class="submitIMG" src="./images/pdf.png" alt=""/>
+                                    </button>
+                                </label>
+                                <label id="installationButton">
+                                    <button id="installButton" type = "button">
+                                        <span id = installationPopup class="popup"></span>
+                                        <img class="submitIMG" src="./images/install.png" alt=""/>
+                                    </button>
+                                </label>
+                                <label id="order">
+                                    <button id="orderButton" type="button" onclick='CSV();'>
+                                        <span id="orderPopup" class="popup"></span>
+                                        <img class="submitIMG" src="./images/order_list.png" alt=""/>
+                                    </button>
+                                </label>
+                                <label id="autoCad" class="disabled">
+                                    <button id="cadButton" type = "button">
+                                        <span id = autocadPopup class="popup"></span>
+                                        <img class="submitIMG" src="./images/autocad.png" alt=""/>
+                                    </button>
+                                </label>
+                                <label id="submit">
+                                    <button id="submitButton" type="button">
+                                        <span id = "submitPopup" class="popup"></span>    
+                                        <img class="submitIMG" src="./images/submit.png" alt=""/>
+                                    </button>
+                                </label>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>                
+            </div>
+            <div id="backward" class="arrowOut">
+                <div id="arrowBack" class="arrow">
+                    <div class="arrow-top"></div>
+                    <div class="arrow-bottom"></div>
+                </div>
+            </div>
+            <div id="forward" class="arrowOut">
+                <div id="arrowForward" class="arrow">
+                    <div class="arrow-top"></div>
+                    <div class="arrow-bottom"></div>
+                </div>
+            </div>
+            <div id="navigation" style="display:none;">
+                <ul id="navlist">
+                    <li class="selected">
+                        <a id="nav1" href="#" class="nav">Project Definition</a>
+                    </li>
+                    <li>
+                        <a id="nav2" href="#" class="nav">Line Definition</a>
+                    </li>
+                    <li>
+                        <a id="nav3" href="#" class="nav">Line Design</a>
+                    </li>
+                    <li>
+                        <a id="nav4" href="#" class="nav">Line Configuration</a>
+                    </li>
+                    <li>
+                        <a id="nav5" href="#" class="nav">Export Data</a>
+                    </li>
+                </ul>
+            </div>
+            <div id="langSelDiv">
+                <select id="langSel" name="langSel">
+                    <option value='de'>Deutsch</option>
+                    <option value='en' selected>English</option>
+                    <option value='es'>Español</option>
+                    <option value='fr'>Français</option>
+                    <option value='fr-be'>Français [Belgique]</option>
+                    <option value='nl'>Nederlands</option>
+                    <option value='pt-pt'>Português</option>
+                    <option value='sv'>Svenska</option>
+                </select>
+            </div>
+            <img id="if_design_logo" src="images/if_designaward2020_red_l_rgb.png" alt="if_design">
+            <img id="etap_logo" src="images/logo-etap.svg" alt="etaplogo">
+        </div>
+        <!-- Confirmation Box -->
+        <img id="etapLogoIMG" src="images/etap_logo.jpg" alt="etaplogo" style="display:none">
+        <script src="bootstrap.min.js"></script>
+        <script src="bootstrap.js"></script>
+
+    </body>
+</html>
