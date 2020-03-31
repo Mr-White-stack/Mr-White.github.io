@@ -1,7 +1,7 @@
 ﻿{
 "title":"Configurador ETAP Ley",
-"projDef":"Definição do projeto",
-"lineDef":"Definição da linha",
+"projDef":"Defini&ccedil;&atilde;o do projeto",
+"lineDef":"Defini&ccedil;&atilde;o da linha",
 "lineDsgn":"Design das linhas",
 "lineConf":"Configuração da linha",
 "projSumm":"Resumo do projeto",
@@ -213,7 +213,7 @@
 "install":"Electrical properties",
 "dimensions":"Installation guidelines - Dimensions",
 "componentsInstall":"Installation guidelines - Components",
-"description":"Descrição",
+"description":"Descri&ccedil;&atilde;o",
 "number_of_drivers":"Number of drivers",
 "power_factor":"Fator de potência PF",
 "max_drivers":"Número máximo de drivers num disjuntor B10A: 15\r\nNúmero máximo de drivers num disjuntor B16A: 24\r\nNúmero máximo de drivers num disjuntor B25A: 37",
