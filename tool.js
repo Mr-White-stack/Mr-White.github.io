@@ -967,7 +967,14 @@ function setUpDesignMap(){
                 }
                 if(intersectingSeg){
                     var intaux = isOnSegment(startPoint);
-                    if(intaux.b){
+                    var intauxEndLim = isOnSegLimit(endPoint);
+                    var intauxEnd = isOnSegment(endPoint);
+                    // var auxEndLim = compareArraySegment(intauxEndLim.i, intauxEndLim.d);
+                    // var auxEnd = compareArraySegment(intauxEnd.i, intauxEnd.d);
+
+
+                    if(intaux.b && !intauxEnd.b && !intauxEndLim.b){
+
                         if(intaux.d != drawShape.attrs.dir){
                             //validate resulting segments length
                             var intercected = getSegmentsArray(intaux.d)[intaux.i];
@@ -994,6 +1001,49 @@ function setUpDesignMap(){
                                 return;
                             }
                         }
+                        
+
+                        
+                    }
+                    
+                    else
+                    {
+                        if(intauxEnd.i != -1 && intauxEnd.b)
+                        {
+                            var aux = compareArraySegment(intauxEnd.i, intauxEnd.d);
+
+                            if(!segsArray[aux].canDraw)
+                            {
+                                
+                                drawShape.destroy();
+                                isDrawing = false;
+                                drawShape = null;
+                                lenShape.visible(false);
+                                lenText.visible(false);
+                                consoleAdd("can t draw on to T Piece");
+                                addedSegment = false;
+                                //recalculate
+                                reCalculateDesign();
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if(intauxEndLim.b && !segsArray[intauxEndLim.i].canDraw)
+                            {
+                                drawShape.destroy();
+                                isDrawing = false;
+                                drawShape = null;
+                                lenShape.visible(false);
+                                lenText.visible(false);
+                                consoleAdd("can t draw on to T Piece");
+                                addedSegment = false;
+                                //recalculate
+                                reCalculateDesign();
+                                return;
+                            }
+                        }
+
                     }
                 }
                 //stop drawing
@@ -1854,7 +1904,7 @@ function isOnSegment(p){
             (p.y < segArray_v[i].start.y && p.y > segArray_v[i].end.y && segArray_v[i].start.y > segArray_v[i].end.y)))
             return {b:true,d:'v',i:i}; //boolean and direction of the intersected segment
     }
-    return {b:false,d:''};
+    return {b:false,d:'',i:i};
 }
 
 function compareArraySegment(id, direction)
@@ -4091,7 +4141,7 @@ function drawExportMap(pieces){
     exportLayerImg.destroy();
     var aux_points;
     
-    
+
 
     //Paint each segment with the respective type of color
     pieces.forEach(function(e,i){
@@ -4099,13 +4149,52 @@ function drawExportMap(pieces){
         if(e.path_type == 'C')
             stroke = '#00bfff';
         if(e.path_type == 'M'){
+            if(e.type == 0){
+            var auxX;
+            var auxY;
+            if(e.data.start.y == e.data.end.y) //horizontal
+            {
+                if(e.data.start.x < e.data.end.x){
+                    auxX = e.data.end.x - 30;
+                }
+                else
+                {
+                    auxX = e.data.start.x + 20; 
+                }
+                if(e.data.start.y < e.data.end.y)
+                {
+                    auxY = e.data.end.y + 20;
+                }
+                else
+                {
+                    auxY = e.data.start.y - 30;
+                }
+            }
+            else //vertical
+            {
+                if(e.data.start.x < e.data.end.x){
+                    auxX = e.data.end.x + 30;
+                }
+                else
+                {
+                    auxX = e.data.start.x - 20; 
+                }
+                if(e.data.start.y < e.data.end.y)
+                {
+                    auxY = e.data.end.y - 20;
+                }
+                else
+                {
+                    auxY = e.data.start.y + 30;
+                }
+            }
             var boltimg = new Image();
             boltimg.onload = function() {
                 var konvaBolt = new Konva.Image({
                     name:'boltIMG',
                     image: boltimg,
-                    x: e.data.start.x -5,   //based on text pos for horizontal , check best way to do it
-                    y:  e.data.start.y - 6,  //based on text pos for horizontal, check best way to do it
+                    x: auxX,   //based on text pos for horizontal , check best way to do it
+                    y:  auxY ,  //based on text pos for horizontal, check best way to do it
                     scaleX: 0.5,
                     scaleY: 0.5,
                     width: 100,
@@ -4119,9 +4208,13 @@ function drawExportMap(pieces){
             };
             boltimg.src = 'images/electricity_lightning_symbol.png';   
 
-
+       
 
             stroke = '#ff00bf';
+        }
+        else 
+            stroke = '#ff00bf';
+
         }
         if(e.path_type == 'Y')
             stroke = '#ffbf00';
@@ -6144,12 +6237,11 @@ function genInstallationSummary(){
     ins.setFontStyle('bold');
     ins.text(48,yy,strings.driver_dali);
     yy+=5;
-
     ins.setFontSize(10);
     ins.setFontStyle('normal');
     ins.text(17,yy,strings.number_of_drivers);
     ins.setFontStyle('bold');
-    ins.text(48,yy,getNumberOfDrivers());
+    ins.text(48,yy,getNumberOfDrivers().toString());
     yy+=5;
 
     ins.setFontSize(10);
