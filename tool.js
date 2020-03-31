@@ -503,16 +503,15 @@ function setUpDesignMap(){
                                 return;
                                 
                             }
-                        } 
-                        // else{
-                        //     var isonlim = isOnSegLimit(startPoint);
-                        //     if(isonlim.b){
-                        //         if(!segsArray[isonlim.i].canDraw){
-                        //             consoleAdd(strings.t_piece_impossible);
-                        //             return;
-                        //         }
-                        //     }
-                        // }
+                        } else{
+                            var isonlim = isOnSegLimit(startPoint);
+                            if(isonlim.b){
+                                if(!segsArray[isonlim.i].canDraw){
+                                    consoleAdd(strings.t_piece_impossible);
+                                    return;
+                                }
+                            }
+                        }
                     }
                     //start drawing
                     drawShape = new Konva.Line({
@@ -811,7 +810,7 @@ function setUpDesignMap(){
                     //has intersection at the end
 
                     if(!isIntersection(currInt)){
-                        if(isCorner(currInt) ){
+                        if(isCorner(currInt)){
                             //make sure the segment goes to the intersection
                             drawShape.attrs.points[2] = currInt.x;
                             drawShape.attrs.points[3] = currInt.y;
@@ -920,7 +919,6 @@ function setUpDesignMap(){
                             reCalculateDesign();
                             return;
                         }
-
                     }
                 }
                 //Intersection on START
@@ -947,7 +945,7 @@ function setUpDesignMap(){
                     //         }
                     //     }
                     // }
-                    if(isValidSegment(startPoint) !== false && isNotEndOrStartCantDraw(endPoint)){
+                    if(isValidSegment(startPoint) !== false){
                     //intersection on start
                     tConnArray.push({x:startPoint.x,y:startPoint.y,checked:false});
                     intersectingCorner = false;
@@ -959,7 +957,7 @@ function setUpDesignMap(){
                         drawShape = null;
                         lenShape.visible(false);
                         lenText.visible(false);
-                        consoleAdd("can t draw from corner in t-piece");
+                        consoleAdd(strings.too_small);
                         addedSegment = false;
                         //recalculate
                         reCalculateDesign();
@@ -1037,8 +1035,6 @@ function setUpDesignMap(){
         /*Save zoom data - scale and offset*/
         zoomVars_design.scale = newScale;
         zoomVars_design.origin = newPos;
-        
-
     });
     /* Drag Handlers */
     designStage.on('dragstart', function (e) {
@@ -1138,7 +1134,6 @@ function redrawSegments(segArray){
         lenGrp.add(lenTxt);
 
     }
-
 
     drawLayer.add(segGrp);
     drawLayer.add(lenGrp); 
@@ -4104,20 +4099,28 @@ function drawExportMap(pieces){
         if(e.path_type == 'C')
             stroke = '#00bfff';
         if(e.path_type == 'M'){
-                //   // main API:
-                //   var imageObj = new Image();
-                //   //imageObj.src = 'images/electricity_lightning_symbol.png';
-                //   imageObj.src = 'images/images_pdf/V3RD0M0X0.jpg';
-                //     img = new Konva.Image({
-                //       x: e.data.start.x,
-                //       y: e.data.start.y,
-                //       image: imageObj,
-                //       width: 100,
-                //       height: 100
-                //     });
-                //     imgGrp_e.add(img);
-                //     exportLayerImg.add(img);
-            
+            var boltimg = new Image();
+            boltimg.onload = function() {
+                var konvaBolt = new Konva.Image({
+                    name:'boltIMG',
+                    image: boltimg,
+                    x: e.data.start.x -5,   //based on text pos for horizontal , check best way to do it
+                    y:  e.data.start.y - 6,  //based on text pos for horizontal, check best way to do it
+                    scaleX: 0.5,
+                    scaleY: 0.5,
+                    width: 100,
+                    height: 100
+                });
+                segGrp_e.add(konvaBolt);
+                konvaBolt.moveToTop();
+                
+                // exportLayer.draw();
+                exportStage.draw();
+            };
+            boltimg.src = 'images/electricity_lightning_symbol.png';   
+
+
+
             stroke = '#ff00bf';
         }
         if(e.path_type == 'Y')

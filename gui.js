@@ -1,6 +1,6 @@
 $(function() {
 
-	var versionNr = '2.2.7' //for official release versionNr is ''
+	var versionNr = '2.2.9' //for official release versionNr is ''
 
 	/*
 	number of fieldsets
