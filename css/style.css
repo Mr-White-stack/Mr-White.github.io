@@ -476,7 +476,6 @@ span.error{
     overflow: hidden;
     z-index: 11;
     margin-bottom: 0;
-    white-space: nowrap;
 }
 /* HIDE RADIO */
 /* #toolsWrapper label{
