@@ -11,6 +11,8 @@ var version = 'v1.5'; //v0.73
 var lenTot;
 var total;
 var imgLey;
+var universalBOM = "\uFEFF";
+
 
 
 //Data variables
@@ -499,19 +501,20 @@ function setUpDesignMap(){
                                 }
                             }
                             else{
-                                consoleAdd(strings.t_piece_impossible);
+                                consoleAdd("can only draw on seg limits");
                                 return;
                                 
                             }
-                        } else{
-                            var isonlim = isOnSegLimit(startPoint);
-                            if(isonlim.b){
-                                if(!segsArray[isonlim.i].canDraw){
-                                    consoleAdd(strings.t_piece_impossible);
-                                    return;
-                                }
-                            }
-                        }
+                         } 
+                        // else{
+                        //     var isonlim = isOnSegLimit(startPoint);
+                        //     if(isonlim.b){
+                        //         if(!segsArray[isonlim.i].canDraw){
+                        //             consoleAdd(strings.t_piece_impossible);
+                        //             return;
+                        //         }
+                        //     }
+                        // }
                     }
                     //start drawing
                     drawShape = new Konva.Line({
@@ -806,121 +809,121 @@ function setUpDesignMap(){
                     }
                 }
                 //Intersection on END
-                if(currInt){
-                    //has intersection at the end
+                // if(currInt){
+                //     //has intersection at the end
 
-                    if(!isIntersection(currInt)){
-                        if(isCorner(currInt)){
-                            //make sure the segment goes to the intersection
-                            drawShape.attrs.points[2] = currInt.x;
-                            drawShape.attrs.points[3] = currInt.y;
-                            tConnArray.push({x:currInt.x,y:currInt.y,checked:false});
-                            ///////////////////////////////// ADD_INTERSECTION
-                        }
-                        else{
-                            //check if its on an existing segment
-                            var isonseg = isOnSegment(currInt);
-                            if(isonseg.b){
-                                var aux = compareArraySegment(isonseg.i, isonseg.d);
+                //     if(!isIntersection(currInt)){
+                //         if(isCorner(currInt)){
+                //             //make sure the segment goes to the intersection
+                //             drawShape.attrs.points[2] = currInt.x;
+                //             drawShape.attrs.points[3] = currInt.y;
+                //             tConnArray.push({x:currInt.x,y:currInt.y,checked:false});
+                //             ///////////////////////////////// ADD_INTERSECTION
+                //         }
+                //         else{
+                //             //check if its on an existing segment
+                //             var isonseg = isOnSegment(currInt);
+                //             if(isonseg.b){
+                //                 var aux = compareArraySegment(isonseg.i, isonseg.d);
 
-                                if(segsArray[aux].canDraw){
-                                    //validate resulting segments length
-                                    var intercected = getSegmentsArray(isonseg.d)[isonseg.i];
-                                    var res = breakSegAtIntersection(currInt,intercected);
+                //                 if(segsArray[aux].canDraw){
+                //                     //validate resulting segments length
+                //                     var intercected = getSegmentsArray(isonseg.d)[isonseg.i];
+                //                     var res = breakSegAtIntersection(currInt,intercected);
                                     
-                                    // if(isValidLength(res[0].start,res[0].end) && isValidLength(res[1].start,res[1].end)){
-                                    if( isValidInterLength(res[0].start,res[0].end,0) &&
-                                        isValidInterLength(res[1].start,res[1].end,0) && 
-                                        isValidInterLength(startPoint,currInt,1)){
-                                        //make sure the segment goes to the intersection
-                                        drawShape.attrs.points[2] = currInt.x;
-                                        drawShape.attrs.points[3] = currInt.y;
-                                        tConnArray.push({x:currInt.x,y:currInt.y,checked:false});
-                                        currInt = null;
-                                        ///////////////////////////////// ADD_INTERSECTION
-                                    }
-                                    else{
-                                        //remove shape
-                                        drawShape.destroy();                                    
-                                        isDrawing = false;
-                                        drawShape = null;
-                                        lenShape.visible(false);
-                                        lenText.visible(false);
-                                        consoleAdd(strings.too_small);
-                                        addedSegment = false;
-                                        //recalculate
-                                        reCalculateDesign();
-                                        return;
-                                        }
-                                    }
-                                    else{
-                                        //remove shape
-                                        drawShape.destroy();                                    
-                                        isDrawing = false;
-                                        drawShape = null;
-                                        lenShape.visible(false);
-                                        lenText.visible(false);
-                                        consoleAdd("can t connect to a segment on T-Piece");
-                                        addedSegment = false;
-                                        //recalculate
-                                        reCalculateDesign();
-                                        return;
-                                    }
-                                }
-                            else{
-                                //remove shape
-                                drawShape.destroy();                                    
-                                isDrawing = false;
-                                drawShape = null;
-                                lenShape.visible(false);
-                                lenText.visible(false);
-                                consoleAdd(strings.too_small);
-                                addedSegment = false;
-                                //recalculate
-                                reCalculateDesign();
-                                return;
-                            }
-                        }
-                    }
-                    else{
-                        //remove shape
-                        drawShape.destroy();
-                        isDrawing = false;
-                        drawShape = null;
-                        lenShape.visible(false);
-                        lenText.visible(false);
-                        consoleAdd(strings.cant_end_intersection);
-                        addedSegment = false;
-                        //recalculate
-                        reCalculateDesign();
-                        return;
-                    }
-                }
-                else{
-                    //double check if it's not intersecting corner at the end
-                    if(isCorner(endPoint) && endPoint != startPoint && isNotEndOrStartCantDraw(endPoint)){
-                        //make sure the segment goes to the intersection
-                        drawShape.attrs.points[2] = endPoint.x;
-                        drawShape.attrs.points[3] = endPoint.y;
-                        tConnArray.push({x:endPoint.x,y:endPoint.y,checked:false});
-                        ///////////////////////////////// ADD_INTERSECTION
-                    } else{
-                        //double check if it's not intersecting an existing intersection at the end
-                        if(isIntersection(endPoint) && endPoint != startPoint){
-                            //remove shape
-                            drawShape.destroy();
-                            isDrawing = false;
-                            drawShape = null;
-                            lenShape.visible(false);
-                            lenText.visible(false);
-                            consoleAdd(strings.cant_end_intersection);
-                            addedSegment = false;
-                            //recalculate
-                            reCalculateDesign();
-                            return;
-                        }
-                    }
-                }
+                //                     // if(isValidLength(res[0].start,res[0].end) && isValidLength(res[1].start,res[1].end)){
+                //                     if( isValidInterLength(res[0].start,res[0].end,0) &&
+                //                         isValidInterLength(res[1].start,res[1].end,0) && 
+                //                         isValidInterLength(startPoint,currInt,1)){
+                //                         //make sure the segment goes to the intersection
+                //                         drawShape.attrs.points[2] = currInt.x;
+                //                         drawShape.attrs.points[3] = currInt.y;
+                //                         tConnArray.push({x:currInt.x,y:currInt.y,checked:false});
+                //                         currInt = null;
+                //                         ///////////////////////////////// ADD_INTERSECTION
+                //                     }
+                //                     else{
+                //                         //remove shape
+                //                         drawShape.destroy();                                    
+                //                         isDrawing = false;
+                //                         drawShape = null;
+                //                         lenShape.visible(false);
+                //                         lenText.visible(false);
+                //                         consoleAdd(strings.too_small);
+                //                         addedSegment = false;
+                //                         //recalculate
+                //                         reCalculateDesign();
+                //                         return;
+                //                         }
+                //                     }
+                //                     else{
+                //                         //remove shape
+                //                         drawShape.destroy();                                    
+                //                         isDrawing = false;
+                //                         drawShape = null;
+                //                         lenShape.visible(false);
+                //                         lenText.visible(false);
+                //                         consoleAdd("can t connect to a segment on T-Piece");
+                //                         addedSegment = false;
+                //                         //recalculate
+                //                         reCalculateDesign();
+                //                         return;
+                //                     }
+                //                 }
+                //             else{
+                //                 //remove shape
+                //                 drawShape.destroy();                                    
+                //                 isDrawing = false;
+                //                 drawShape = null;
+                //                 lenShape.visible(false);
+                //                 lenText.visible(false);
+                //                 consoleAdd(strings.too_small);
+                //                 addedSegment = false;
+                //                 //recalculate
+                //                 reCalculateDesign();
+                //                 return;
+                //             }
+                //         }
+                //     }
+                //     else{
+                //         //remove shape
+                //         drawShape.destroy();
+                //         isDrawing = false;
+                //         drawShape = null;
+                //         lenShape.visible(false);
+                //         lenText.visible(false);
+                //         consoleAdd(strings.cant_end_intersection);
+                //         addedSegment = false;
+                //         //recalculate
+                //         reCalculateDesign();
+                //         return;
+                //     }
+                // }
+                // else{
+                //     //double check if it's not intersecting corner at the end
+                //     if(isCorner(endPoint) && endPoint != startPoint && isNotEndOrStartCantDraw(endPoint)){
+                //         //make sure the segment goes to the intersection
+                //         drawShape.attrs.points[2] = endPoint.x;
+                //         drawShape.attrs.points[3] = endPoint.y;
+                //         tConnArray.push({x:endPoint.x,y:endPoint.y,checked:false});
+                //         ///////////////////////////////// ADD_INTERSECTION
+                //     } else{
+                //         //double check if it's not intersecting an existing intersection at the end
+                //         if(isIntersection(endPoint) && endPoint != startPoint){
+                //             //remove shape
+                //             drawShape.destroy();
+                //             isDrawing = false;
+                //             drawShape = null;
+                //             lenShape.visible(false);
+                //             lenText.visible(false);
+                //             consoleAdd(strings.cant_end_intersection);
+                //             addedSegment = false;
+                //             //recalculate
+                //             reCalculateDesign();
+                //             return;
+                //         }
+                //     }
+                // }
                 //Intersection on START
                 //check if it was corner
                 if(intersectingCorner){
@@ -965,87 +968,101 @@ function setUpDesignMap(){
                     }
                     ///////////////////////////////// ADD_INTERSECTION
                 }
-                if(intersectingSeg){
-                    var intaux = isOnSegment(startPoint);
-                    var intauxEndLim = isOnSegLimit(endPoint);
-                    var intauxEnd = isOnSegment(endPoint);
-                    // var auxEndLim = compareArraySegment(intauxEndLim.i, intauxEndLim.d);
-                    // var auxEnd = compareArraySegment(intauxEnd.i, intauxEnd.d);
-
-
-                    if(intaux.b && !intauxEnd.b && !intauxEndLim.b){
-
-                        if(intaux.d != drawShape.attrs.dir){
-                            //validate resulting segments length
-                            var intercected = getSegmentsArray(intaux.d)[intaux.i];
-                            var res = breakSegAtIntersection(startPoint,intercected);
-                            if( isValidInterLength(res[0].start,res[0].end,0) &&
-                                isValidInterLength(res[1].start,res[1].end,0) &&
-                                isValidInterLength(startPoint,endPoint,1) ){
-                                    //intersection on start
-                                    tConnArray.push({x:startPoint.x,y:startPoint.y,checked:false});
-                                    intersectingSeg = false;
-                                    ///////////////////////////////// ADD_INTERSECTION
-                            }
-                            else{
-                                //remove shape
-                                drawShape.destroy();
-                                isDrawing = false;
-                                drawShape = null;
-                                lenShape.visible(false);
-                                lenText.visible(false);
-                                consoleAdd(strings.too_small);
-                                addedSegment = false;
-                                //recalculate
-                                reCalculateDesign();
-                                return;
-                            }
-                        }
-                        
-
-                        
-                    }
-                    
-                    else
-                    {
-                        if(intauxEnd.i != -1 && intauxEnd.b)
-                        {
-                            var aux = compareArraySegment(intauxEnd.i, intauxEnd.d);
-
-                            if(!segsArray[aux].canDraw)
-                            {
-                                
-                                drawShape.destroy();
-                                isDrawing = false;
-                                drawShape = null;
-                                lenShape.visible(false);
-                                lenText.visible(false);
-                                consoleAdd("can t draw on to T Piece");
-                                addedSegment = false;
-                                //recalculate
-                                reCalculateDesign();
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            if(intauxEndLim.b && !segsArray[intauxEndLim.i].canDraw)
-                            {
-                                drawShape.destroy();
-                                isDrawing = false;
-                                drawShape = null;
-                                lenShape.visible(false);
-                                lenText.visible(false);
-                                consoleAdd("can t draw on to T Piece");
-                                addedSegment = false;
-                                //recalculate
-                                reCalculateDesign();
-                                return;
-                            }
-                        }
-
-                    }
+                if(currInt)
+                {
+                    drawShape.destroy();
+                    isDrawing = false;
+                    drawShape = null;
+                    lenShape.visible(false);
+                    lenText.visible(false);
+                    consoleAdd("new string for this situation");
+                    addedSegment = false;
+                    //recalculate
+                    reCalculateDesign();
+                    return;
                 }
+                
+                // if(intersectingSeg){
+                //     var intaux = isOnSegment(startPoint);
+                //     var intauxEndLim = isOnSegLimit(endPoint);
+                //     var intauxEnd = isOnSegment(endPoint);
+                //     // var auxEndLim = compareArraySegment(intauxEndLim.i, intauxEndLim.d);
+                //     // var auxEnd = compareArraySegment(intauxEnd.i, intauxEnd.d);
+
+
+                //     if(intaux.b && !intauxEnd.b && !intauxEndLim.b){
+
+                //         if(intaux.d != drawShape.attrs.dir){
+                //             //validate resulting segments length
+                //             var intercected = getSegmentsArray(intaux.d)[intaux.i];
+                //             var res = breakSegAtIntersection(startPoint,intercected);
+                //             if( isValidInterLength(res[0].start,res[0].end,0) &&
+                //                 isValidInterLength(res[1].start,res[1].end,0) &&
+                //                 isValidInterLength(startPoint,endPoint,1) ){
+                //                     //intersection on start
+                //                     tConnArray.push({x:startPoint.x,y:startPoint.y,checked:false});
+                //                     intersectingSeg = false;
+                //                     ///////////////////////////////// ADD_INTERSECTION
+                //             }
+                //             else{
+                //                 //remove shape
+                //                 drawShape.destroy();
+                //                 isDrawing = false;
+                //                 drawShape = null;
+                //                 lenShape.visible(false);
+                //                 lenText.visible(false);
+                //                 consoleAdd(strings.too_small);
+                //                 addedSegment = false;
+                //                 //recalculate
+                //                 reCalculateDesign();
+                //                 return;
+                //             }
+                //         }
+                        
+
+                        
+                //     }
+                    
+                //     else
+                //     {
+                //         if(intauxEnd.i != -1 && intauxEnd.b)
+                //         {
+                //             var aux = compareArraySegment(intauxEnd.i, intauxEnd.d);
+
+                //             if(!segsArray[aux].canDraw)
+                //             {
+                                
+                //                 drawShape.destroy();
+                //                 isDrawing = false;
+                //                 drawShape = null;
+                //                 lenShape.visible(false);
+                //                 lenText.visible(false);
+                //                 consoleAdd("can t draw on to T Piece");
+                //                 addedSegment = false;
+                //                 //recalculate
+                //                 reCalculateDesign();
+                //                 return;
+                //             }
+                //         }
+                //         else
+                //         {
+                //             if(intauxEndLim.b && !segsArray[intauxEndLim.i].canDraw)
+                //             {
+                //                 drawShape.destroy();
+                //                 isDrawing = false;
+                //                 drawShape = null;
+                //                 lenShape.visible(false);
+                //                 lenText.visible(false);
+                //                 consoleAdd("can t draw on to T Piece");
+                //                 addedSegment = false;
+                //                 //recalculate
+                //                 reCalculateDesign();
+                //                 return;
+                //             }
+                //         }
+
+                //     }
+                // }
                 //stop drawing
                 drawShape.opacity(1);
                 isDrawing = false;
@@ -1236,6 +1253,12 @@ function redrawSegments(segArray){
         cornGrp.add(drawShape);
     }
     drawLayer.add(cornGrp);
+    segsArray.forEach(function(element)
+    {
+
+        element.canDraw = false;
+
+    });
     /* T-PIECES */    
     for(var i=0;i<tConnArray.length;i++){
         var intpoints = [];
@@ -1303,15 +1326,15 @@ function redrawSegments(segArray){
     designStage.draw();
 
     //put intertype on the t-piece
-    tConnArray.forEach(function(element)
-    {
-        if(element.checked == false)
+    // tConnArray.forEach(function(element)
+    // {
+    //     if(element.checked == false)
 
-        element.interType = interType;
-        element.checked = true;
+    //     element.interType = interType;
+    //     element.checked = true;
 
-    });
-    getSegmentAttached();
+    // });
+    // getSegmentAttached();
 
     //can add the function to the length
 }
@@ -1375,75 +1398,75 @@ function getSegmentAttached()
     }
 }
 
-function isNotEndOrStartCantDraw(point)
-{
-    for(var i = 0; i < segsArray.length; i++)
-    {
-        if(segsArray[i].canDraw == false)  
-        {
-            if(point.x == segsArray[i].start.x || point.x == segsArray[i].end.x || point.y == segsArray[i].start.y || point.y == segsArray[i].end.y)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return true;
-        }
-    }
-}
-//checkl if it it s a valid segment to attach
-function isValidSegment(startPoint)
-{
-    for(var i = 0; i < segsArray.length; i++)
-    {
-        if(segsArray[i].start.x == segsArray[i].end.x)
-        //vertical
-        {
-            if(segsArray[i].start.y>segsArray[i].end.y)
-            {
+// function isNotEndOrStartCantDraw(point)
+// {
+//     for(var i = 0; i < segsArray.length; i++)
+//     {
+//         if(segsArray[i].canDraw == false)  
+//         {
+//             if(point.x == segsArray[i].start.x || point.x == segsArray[i].end.x || point.y == segsArray[i].start.y || point.y == segsArray[i].end.y)
+//             {
+//                 return false;
+//             }
+//         }
+//         else
+//         {
+//             return true;
+//         }
+//     }
+// }
+// //checkl if it it s a valid segment to attach
+// function isValidSegment(startPoint)
+// {
+//     for(var i = 0; i < segsArray.length; i++)
+//     {
+//         if(segsArray[i].start.x == segsArray[i].end.x)
+//         //vertical
+//         {
+//             if(segsArray[i].start.y>segsArray[i].end.y)
+//             {
 
-                if(segsArray[i].start.y < startPoint.y < segsArray[i].end.y && startPoint.x == segsArray[i].start.x
-                    && !segsArray[i].canDraw)
-                    {
-                        return false;
-                    }
-            }
-            else
-            {
-                if(segsArray[i].end.y < startPoint.y < segsArray[i].start.y && startPoint.x == segsArray[i].end.x
-                    && !segsArray[i].canDraw)
-                    {
-                        return false;
-                    }
-            }
-        }
-        else
-        //horizontal
-        {
-            if(segsArray[i].start.y>segsArray[i].end.y)
-            {
+//                 if(segsArray[i].start.y < startPoint.y < segsArray[i].end.y && startPoint.x == segsArray[i].start.x
+//                     && !segsArray[i].canDraw)
+//                     {
+//                         return false;
+//                     }
+//             }
+//             else
+//             {
+//                 if(segsArray[i].end.y < startPoint.y < segsArray[i].start.y && startPoint.x == segsArray[i].end.x
+//                     && !segsArray[i].canDraw)
+//                     {
+//                         return false;
+//                     }
+//             }
+//         }
+//         else
+//         //horizontal
+//         {
+//             if(segsArray[i].start.y>segsArray[i].end.y)
+//             {
 
-                if(segsArray[i].start.x < startPoint.x < segsArray[i].end.x && startPoint.y == segsArray[i].start.y
-                    && !segsArray[i].canDraw)
-                    {
-                        return false;
-                    }
+//                 if(segsArray[i].start.x < startPoint.x < segsArray[i].end.x && startPoint.y == segsArray[i].start.y
+//                     && !segsArray[i].canDraw)
+//                     {
+//                         return false;
+//                     }
 
-            }
-            else
-            {
-                if(segsArray[i].end.x < startPoint.x < segsArray[i].start.x && startPoint.y == segsArray[i].end.y
-                    && !segsArray[i].canDraw)
-                    {
-                        return false;
-                    }
+//             }
+//             else
+//             {
+//                 if(segsArray[i].end.x < startPoint.x < segsArray[i].start.x && startPoint.y == segsArray[i].end.y
+//                     && !segsArray[i].canDraw)
+//                     {
+//                         return false;
+//                     }
     
-            }
+//             }
             
-        }
-    }
-}
+//         }
+//     }
+// }
 
 
 
@@ -1556,7 +1579,7 @@ function getSegmentsArray(dir){
     segGrp.children.forEach(function(e){
         var start = {x:e.attrs.points[0], y:e.attrs.points[1]};
         var end = {x:e.attrs.points[2], y:e.attrs.points[3]};
-        var checked = true;
+        var checked = false;
         if(dir == 'h' || dir === 'v'){
             if(e.attrs.dir == dir)
                 out.push({start:start,end:end,canDraw:checked});
@@ -1614,7 +1637,7 @@ function cleanSegOverlap(index,array){
     return aux_out;
 }
 function getOverlap(s1, s2) {
-    var canDraw = true;
+    var canDraw = false;
     var p1 = {x: s1.start.x, y: s1.start.y};
     var p2 = {x: s1.end.x, y: s1.end.y};		
     var p3 = {x: s2.start.x, y: s2.start.y};
@@ -2085,7 +2108,7 @@ function getInterType(inter){
 function getMissingSeg(interPoint,ignoreSeg){
     // var segArray =  getSegmentsArray('h');		
     var segArray = segsArray;
-    var canDraw = true;
+    var canDraw = false;
     //check on horizontal segments
     for(var i=0; i<segArray.length; i++){
         if(segArray[i].start.y === segArray[i].end.y){
@@ -2126,7 +2149,7 @@ function comparePoints(p1,p2){
     return false;
 }
 function breakSegAtIntersection(inter,seg){
-    var checked = true;
+    var checked = false;
     out = [];
     if(seg.start.x == seg.end.x){
         if(inter.x == seg.start.x){
@@ -2938,9 +2961,20 @@ function getComposition(seg,control,segId){
     }
     //shielded
     if(opticsMode === 2){
+        
+
+        
+        
+        
         /* 
         shielded
-        lengths: 912; 1368 ; 1824 ; 2280 ; 2736 
+
+         5 * 2736 = 13680
+         13680 + 1824 +1368 = 16872
+        
+
+
+        lengths: 1368 ; 1824 ; 2280 ; 2736    16872
         */
         if(len <= opticsLen[1][opticsLen[1].length-1]){
             //check if it can be only one channel
@@ -2963,7 +2997,23 @@ function getComposition(seg,control,segId){
             }
         }
         else{
+            //add the exception for the length 16872, need to calculate the segments that result
             //more than one channel
+            if(len = 16872)
+        
+            {
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][1]);
+                comb.push(opticsLen[1][0]);
+
+            }
+            else{
+
             for(var i=opticsLen[1].length-1; i>=0;i--){
                 var mod = len%opticsLen[1][i];
                 // console.log(mod);
@@ -2980,7 +3030,7 @@ function getComposition(seg,control,segId){
                 }
                 // if(opticsLen[1].includes(mod)){
                 //     // if mod = valid opticsLen value, use it
-                //     var nPieces = Math.floor(len/opticsLen[1][i]);
+                //     var nPieces = Math.floor(len/opticsLen[1][i]);16872 
                 //     comb.push(mod);
                 //     while(nPieces){
                 //         comb.push(opticsLen[1][i]);
@@ -3040,6 +3090,7 @@ function getComposition(seg,control,segId){
                     div--;
                 }
             }
+        }
         }
     }   
     var newControl = control;
@@ -4150,51 +4201,19 @@ function drawExportMap(pieces){
             stroke = '#00bfff';
         if(e.path_type == 'M'){
             if(e.type == 0){
-            var auxX;
-            var auxY;
-            if(e.data.start.y == e.data.end.y) //horizontal
-            {
-                if(e.data.start.x < e.data.end.x){
-                    auxX = e.data.end.x - 30;
-                }
-                else
-                {
-                    auxX = e.data.start.x + 20; 
-                }
-                if(e.data.start.y < e.data.end.y)
-                {
-                    auxY = e.data.end.y + 20;
-                }
-                else
-                {
-                    auxY = e.data.start.y - 30;
-                }
-            }
-            else //vertical
-            {
-                if(e.data.start.x < e.data.end.x){
-                    auxX = e.data.end.x + 30;
-                }
-                else
-                {
-                    auxX = e.data.start.x - 20; 
-                }
-                if(e.data.start.y < e.data.end.y)
-                {
-                    auxY = e.data.end.y - 20;
-                }
-                else
-                {
-                    auxY = e.data.start.y + 30;
-                }
-            }
+            var auxX, auxY, middleX, middleY;
+
+                auxY = (e.data.end.y - e.data.start.y)/2;
+                middleY = e.data.end.y - auxY;
+                auxX = (e.data.end.x - e.data.start.x)/2;
+                middleX = e.data.end.x - auxX-50;
             var boltimg = new Image();
             boltimg.onload = function() {
                 var konvaBolt = new Konva.Image({
                     name:'boltIMG',
                     image: boltimg,
-                    x: auxX,   //based on text pos for horizontal , check best way to do it
-                    y:  auxY ,  //based on text pos for horizontal, check best way to do it
+                    x: middleX,   //based on text pos for horizontal , check best way to do it
+                    y:  middleY ,  //based on text pos for horizontal, check best way to do it
                     scaleX: 0.5,
                     scaleY: 0.5,
                     width: 100,
@@ -4859,6 +4878,7 @@ function parseCodesData(obj){
     for (var i=1; i<allTextLines.length; i++) {
         var data = allTextLines[i].split(';');
         out[''+data[0]] = {
+            ltr:data[1],
             llmf:parseFloat(data[16]),
             err: parseInt(data[17]),
             tot:parseInt(data[18]), 
@@ -5692,18 +5712,20 @@ function genProjectSummary(){
                         yy = addSegTableHeader(d,yy,true);
                     }
                     yy+=5;
-
+                   
                     var code = getPieceCode(getPieceBySegId(e.id,modules));
                     var codeCustom = getPieceCodeForCustomColor(getPieceBySegId(e.id,modules));
-
-
+                    if(typeof codeList[code] !== 'undefined')
+                    {
+                        var ltr = codeList[code].ltr;
+                    }
                     d.text((ch+6),yy,e.disp);
                     d.text(len,yy,getSegLength(e).toString());
                     if(e.dir) d.text((dwn+7),yy,'x');
                     if(e.ind) d.text((up+5),yy,'x');
                     d.text(oc,yy,codeCustom);
                     d.setTextColor(0,0,255);
-                    d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld' });
+                    d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/' + code.replace("/", "_") + ltr + '.uld' });
                     d.setTextColor(0,0,0);
                     d.setFontStyle('normal');
                 });
@@ -5722,7 +5744,10 @@ function genProjectSummary(){
                 yy+=5;
 
                 var code = getPieceCode(getPieceBySegId(subAux[0].id,pieces));
-
+                if(typeof codeList[code] !== 'undefined')
+                {
+                    var ltr = codeList[code].ltr;
+                }
 
                 d.text((ch+2),yy,subAux[0].disp);
                 d.text(len,yy,getSegLength(subAux[0]).toString());
@@ -5730,7 +5755,7 @@ function genProjectSummary(){
                 if(subAux[0].ind) d.text((up+5),yy,'x');
                 d.text(oc,yy,getPieceCodeForCustomColor(getPieceBySegId(subAux[0].id,modules)));
                 d.setTextColor(0,0,255);
-                d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld' });
+                d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+ ltr +'.uld' });
                 d.setTextColor(0,0,0);
                 d.setFontStyle('normal');
             }
@@ -5769,14 +5794,17 @@ function genProjectSummary(){
                     var code = getPieceCode(getPieceBySegId(e.id,modules));
                     var codeCustom = getPieceCodeForCustomColor(getPieceBySegId(e.id,modules));
 
-
+                    if(typeof codeList[code] !== 'undefined')
+                    {
+                        var ltr = codeList[code].ltr;
+                    }
                     d.text((ch+6),yy,e.disp);
                     d.text(len,yy,getSegLength(e).toString());
                     if(e.dir) d.text((dwn+7),yy,'x');
                     d.text(oc,yy,codeCustom);
       
                     d.setTextColor(0,0,255);
-                    d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld' });
+                    d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+ ltr + '.uld' });
                     d.setTextColor(0,0,0);
                     d.setFontStyle('normal');
                 });
@@ -5793,14 +5821,17 @@ function genProjectSummary(){
                 yy+=5;
 
                 var code = getPieceCode(getPieceBySegId(subAux[0].id,pieces));
-
+                if(typeof codeList[code] !== 'undefined')
+                {
+                    var ltr = codeList[code].ltr;
+                }
                 d.text((ch+2),yy,subAux[0].disp);
                 d.text(len,yy,getSegLength(subAux[0]).toString());
                 if(subAux[0].dir) d.text((dwn+7),yy,'x');
                 d.text(oc,yy,getPieceCodeForCustomColor(getPieceBySegId(subAux[0].id,modules)));
                 d.setFontStyle('italic');
                 d.setTextColor(0,0,255);
-                d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld' });
+                d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+ ltr + '.uld' });
                 d.setTextColor(0,0,0);
                 d.setFontStyle('normal');
 
@@ -5854,14 +5885,17 @@ function genProjectSummary(){
                 }
                 var code = getPieceCode(e);
                 var codeCustom = getPieceCodeForCustomColor(e);
-
+                if(typeof codeList[code] !== 'undefined')
+                {
+                    var ltr = codeList[code].ltr;
+                }
 
                 yy+=5;
                 d.text((ch+2),yy,e.data.disp);
                 if(e.data.dir) d.text((dwn+7),yy,'x');
                 d.text(oc,yy,codeCustom);
                 d.setTextColor(0,0,255);
-                d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld' });
+                d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+ ltr + '.uld' });
                 d.setTextColor(0,0,0);
                 d.setFontStyle('normal');
             }
@@ -5915,13 +5949,16 @@ function genProjectSummary(){
                 var code = getPieceCode(e);
                 var codeCustom = getPieceCodeForCustomColor(e);
 
-
+                if(typeof codeList[code] !== 'undefined')
+                {
+                    var ltr = codeList[code].ltr;
+                } 
                 yy+=5;
                 d.text((ch+2),yy,e.data.disp);
                 if(e.data.dir) d.text((dwn+7),yy,'x');
                 d.text(oc,yy,codeCustom);
                 d.setTextColor(0,0,255);
-                d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld' });
+                d.textWithLink('ULD', uld, yy, { url: 'https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+ ltr +'.uld' });
                 d.setTextColor(0,0,0);
                 d.setFontStyle('normal');
 
@@ -6969,13 +7006,107 @@ function genInstallationSummary(){
         yy+=5
     }
 
+    yy+=8
+    ins.setFontSize(16);
+    ins.text(17,yy,"Videos to install");
+    yy+=15
+    ins.setFontSize(10);
+    ins.setFontStyle('normal');
+    switch(getInstalation().sel){
+        case '0': //ceiling
+            if(getOptics().cod == 'D')
+            {
+                ins.text(17, yy, strings.installation_video_ceiling_diff);
+                yy+=5
+                ins.setTextColor(0,0,255);
+                ins.text(30, yy, strings.installation_video_ceiling_diff_link);
+                ins.setTextColor(0,0,0);
+                yy+=5
+                ins.text(17, yy, strings.installation_video_diffusor_optic);
+                yy+=5
+                ins.setTextColor(0,0,255);
+                ins.text(30, yy, strings.installation_video_diffusor_optic_link);
+                ins.setTextColor(0,0,0);
+                yy+=5
+            }
+            else if(getOptics().cod == 'S' && getOptics().cod == 'B')
+            {
+                ins.text(17, yy, strings.installation_video_ceiling_shield);
+                yy+=5
+                ins.setTextColor(0,0,255);
+                ins.text(30, yy, strings.installation_video_ceiling_shield_link);
+                ins.setTextColor(0,0,0);
+                yy+=5
+            }
+    break;
+    case '1': //wall
+            if(getOptics().cod == 'D')
+            {
+                ins.text(17, yy, strings.installation_video_wall_diff);
+                yy+=5
+                ins.setTextColor(0,0,255);
+                ins.text(30, yy, strings.installation_video_wall_diff_link);
+                ins.setTextColor(0,0,0);
+                yy+=5
+                ins.text(17, yy, strings.installation_video_diffusor_optic);
+                yy+=5
+                ins.setTextColor(0,0,255);
+                ins.text(30, yy, strings.installation_video_diffusor_optic_link);
+                ins.setTextColor(0,0,0);
+                yy+=5
+            }
 
+    break;
+    case '2': //suspended
+        if(getOptics().cod == 'D')
+        {
+            ins.text(17, yy, strings.installation_video_suspended_diff);
+            yy+=5
+            ins.setTextColor(0,0,255);
+            ins.text(30, yy, strings.installation_video_suspended_diff_link);
+            ins.setTextColor(0,0,0);
+            yy+=5
+            ins.text(17, yy, strings.installation_video_diffusor_optic);
+            yy+=5
+            ins.setTextColor(0,0,255);
+            ins.text(30, yy, strings.installation_video_diffusor_optic_link);
+            ins.setTextColor(0,0,0);
+            yy+=5
+        }
+        else if(getOptics().cod == 'S' && getOptics().cod == 'B')
+        {
+            ins.text(17, yy, strings.installation_video_suspended_shield);
+            yy+=5
+            ins.setTextColor(0,0,255);
+            ins.text(30, yy, strings.installation_video_suspended_shield_link);
+            ins.setTextColor(0,0,0);
+            yy+=5
+        }
+    break;
 
-
+    }
+    if(checkCorners() == true) 
+    {
+        ins.text(17, yy, strings.installation_video_corner);
+        yy+=5
+        ins.setTextColor(0,0,255);
+        ins.text(30, yy, strings.installation_video_corner_link);
+        ins.setTextColor(0,0,0);
+        yy+=5
+    }
+    if(checkTpieces() == true)
+    {
+        ins.text(17, yy, strings.installation_video_t_piece);
+        yy+=5
+        ins.setTextColor(0,0,255);
+        ins.text(30, yy, strings.installation_video_t_piece_link);
+        ins.setTextColor(0,0,0);
+        yy+=5
+    }
     return ins;
 }
 
-//Check for corners in the line(all draw)
+//Check for corners in the line(all draw)s
 function checkCorners()
 {
     for(var  i = 0; i < modules.length; i++)
@@ -7349,7 +7480,7 @@ function CSV()
 
     let link = document.createElement('a')
     link.id = 'download-csv'
-    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result));
+    link.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(universalBOM + result));
     link.setAttribute('download', 'Ley-'+projectDef.project.name+'-'+projectDef.project.room+'-orderlist.csv');
     document.body.appendChild(link)
     document.querySelector('#download-csv').click()
