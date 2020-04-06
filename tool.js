@@ -501,7 +501,7 @@ function setUpDesignMap(){
                                 }
                             }
                             else{
-                                consoleAdd("can only draw on seg limits");
+                                consoleAdd(strings.can_only_draw_on_seg_limits);
                                 return;
                                 
                             }
@@ -975,7 +975,7 @@ function setUpDesignMap(){
                     drawShape = null;
                     lenShape.visible(false);
                     lenText.visible(false);
-                    consoleAdd("new string for this situation");
+                    consoleAdd(strings.can_not_make_t_piece);
                     addedSegment = false;
                     //recalculate
                     reCalculateDesign();
@@ -2999,17 +2999,17 @@ function getComposition(seg,control,segId){
         else{
             //add the exception for the length 16872, need to calculate the segments that result
             //more than one channel
-            if(len = 16872)
+            if(len == 16872)
         
-            {
-                comb.push(opticsLen[1][3]);
-                comb.push(opticsLen[1][3]);
-                comb.push(opticsLen[1][3]);
-                comb.push(opticsLen[1][3]);
-                comb.push(opticsLen[1][3]);
-                comb.push(opticsLen[1][3]);
-                comb.push(opticsLen[1][1]);
+            {                
                 comb.push(opticsLen[1][0]);
+                comb.push(opticsLen[1][1]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+
 
             }
             else{
@@ -4214,8 +4214,8 @@ function drawExportMap(pieces){
                     image: boltimg,
                     x: middleX,   //based on text pos for horizontal , check best way to do it
                     y:  middleY ,  //based on text pos for horizontal, check best way to do it
-                    scaleX: 0.5,
-                    scaleY: 0.5,
+                    scaleX: 0.4,
+                    scaleY: 0.4,
                     width: 100,
                     height: 100
                 });
@@ -7849,22 +7849,22 @@ function EveryPointOnCorner(segment)
     var centerPointY0 = -(segment.data.c.y/gridSize*gridSizeInMM);
 
     out += (centerPointX0 - 560) + ",";
-    out += (centerPointY0 - 28);
+    out += (centerPointY0 - 30);
     out += "\r\n";
     out += (centerPointX0 - 560) + ",";
-    out += (centerPointY0 + 28);
+    out += (centerPointY0 + 30);
     out += "\r\n";
     out += (centerPointX0 + 28) + ",";
-    out += (centerPointY0 + 28);
+    out += (centerPointY0 + 30);
     out += "\r\n";
-    out += (centerPointX0 + 28) + ",";
+    out += (centerPointX0 + 30) + ",";
     out += (centerPointY0 - 560);
     out += "\r\n";
-    out += (centerPointX0 - 28) + ",";
+    out += (centerPointX0 - 30) + ",";
     out += (centerPointY0 - 560);
     out += "\r\n";
-    out += (centerPointX0 - 28) + ",";
-    out += (centerPointY0 - 28);
+    out += (centerPointX0 - 30) + ",";
+    out += (centerPointY0 - 30);
     out += "\r\n";
 
     return out;   
