@@ -1,5 +1,5 @@
 ArticleItem;LT_Revision;Product Group;Installation;Optic;Beam & Material;Modulation;Power Supply;/;Lampcolor;Length;Light Direct;Light Indirect;Driver;Trough wiring;Colour;LLMF 50kh;Error Code;Luminous flux (lumen);Power (Watt);Power factor;Luminous flux uplight;Luminous flux downlight;UGR;Shielding angle C0;Shielding angle C90;Number of drivers
-V3RB10M/N3M0D0X0;Hallo_test;V3;R;B;1;0;M;/;N;3;M;0;D;0;X0;0.962100681;0;10000;2.329.168.197;0.9;0;2900;19;60;65;1
+V3RB10M/N3M0D0X0;_LTRevAA;V3;R;B;1;0;M;/;N;3;M;0;D;0;X0;0.962100681;0;2900;2.329.168.197;0.9;0;2900;19;60;65;1
 V3RB10M/N3M0D0X1;_LTRevAA;V3;R;B;1;0;M;/;N;3;M;0;D;0;X1;0.962100681;0;2900;16;0.9;0;2900;19;60;65;1
 V3RB10M/N3M0D0X2;_LTRevAA;V3;R;B;1;0;M;/;N;3;M;0;D;0;X2;0.962100681;0;2900;16;0.9;0;2900;19;60;65;1
 V3RB10M/N4M0D0X0;_LTRevAA;V3;R;B;1;0;M;/;N;4;M;0;D;0;X0;0.962100681;0;3750;22;0.93;0;3750;19;60;65;1
