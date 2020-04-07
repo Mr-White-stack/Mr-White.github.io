@@ -1,6 +1,6 @@
 $(function() {
 
-	var versionNr = '2.3.3' //for official release versionNr is ''
+	//var versionNr = '2.3.2' //for official release versionNr is ''
 
 	/*
 	number of fieldsets
@@ -538,8 +538,8 @@ $(function() {
 		/*Title*/
 		// $('#titleBar').html(strings.title+' '+version);
 		// $('#contentTitle').html(strings.title+' '+version);
-		$('#titleBar').html(strings.title+' '+versionNr); //release without version
-		$('#contentTitle').html(strings.title+' '+versionNr); //release without version
+		$('#titleBar').html(strings.title); //release without version
+		$('#contentTitle').html(strings.title); //release without version
 		
 		/*Project Definition*/
 		$('#stepTitle_0').html(strings.projDef);

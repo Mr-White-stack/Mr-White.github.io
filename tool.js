@@ -4134,7 +4134,7 @@ function getLengthCod(len){
             out = '3';
             break;
         case 1120:  //diffuser
-        case 1150:  //shielded
+        case 1824:  //shielded
             out = '4';
             break;  
         case 1400:  //diffuser
@@ -5021,9 +5021,13 @@ function genOverviewTable(pieces){
                         ind = '&#10003';
                     var code = getPieceCode(getPieceBySegId(e.id,pieces));
                     var codeCustom = getPieceCodeForCustomColor(getPieceBySegId(e.id,pieces));
+                    if(typeof codeList[code] !== 'undefined')
+                    {
+                        var ltr = codeList[code].ltr;
+                    }
 
                     //generation of the ULD code 
-                    var link = '<a href="/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
+                    var link = '<a href="https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_") + ltr + '.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
                     html+='<tr><td></td><td>'+e.disp+'</td><td>'+getSegLength(e)+'</td><td>'+dir+'</td><td>'+ind+'</td><td>'+codeCustom+'</td><td>'+link+'</td></tr>';
                 });
             }
@@ -5035,8 +5039,12 @@ function genOverviewTable(pieces){
                     ind = '&#10003';
                 var code = getPieceCode(getPieceBySegId(subAux[0].id,pieces));
                 var codeCustom = getPieceCodeForCustomColor(getPieceBySegId(subAux[0].id,pieces));
+                if(typeof codeList[code] !== 'undefined')
+                {
+                    var ltr = codeList[code].ltr;
+                }
 
-                var link = '<a href="/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
+                var link = '<a href="https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_") + ltr + '.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
                 //only father
                 html+='<tr><td>'+subAux[0].disp+'</td><td></td><td>'+getSegLength(subAux[0])+'</td><td>'+dir+'</td><td>'+ind+'</td><td>'+codeCustom+'</td><td>'+link+'</td></tr>';
             }
@@ -5058,8 +5066,12 @@ function genOverviewTable(pieces){
                         dir = '&#10003';
                     var code = getPieceCode(getPieceBySegId(e.id,pieces));
                     var codeCustom = getPieceCodeForCustomColor(getPieceBySegId(e.id,pieces));
+                    if(typeof codeList[code] !== 'undefined')
+                    {
+                        var ltr = codeList[code].ltr;
+                    }
 
-                    var link = '<a href="/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
+                    var link = '<a href="https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_") + ltr + '.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
                     html+='<tr><td></td><td>'+e.disp+'</td><td>'+getSegLength(e)+'</td><td>'+dir+'</td><td>'+codeCustom+'</td><td>'+link+'</td></tr>';
                 });
             }
@@ -5069,8 +5081,12 @@ function genOverviewTable(pieces){
                     dir = '&#10003';
                 var code = getPieceCode(getPieceBySegId(subAux[0].id,pieces));
                 var codeCustom = getPieceCodeForCustomColor(getPieceBySegId(subAux[0].id,pieces));
+                if(typeof codeList[code] !== 'undefined')
+                {
+                    var ltr = codeList[code].ltr;
+                }
 
-                var link = '<a href="/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
+                var link = '<a href="https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+ ltr +'.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
                 //only father
                 html+='<tr><td>'+subAux[0].disp+'</td><td></td><td>'+getSegLength(subAux[0])+'</td><td>'+dir+'</td><td>'+codeCustom+'</td><td>'+link+'</td></tr>';
             }
@@ -5090,8 +5106,14 @@ function genOverviewTable(pieces){
                 var code = getPieceCode(e);
                 var codeCustom = getPieceCodeForCustomColor(e);
 
+                if(typeof codeList[code] !== 'undefined')
+                {
+                    var ltr = codeList[code].ltr;
+                }
 
-                var link = '<a href="/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
+
+
+                var link = '<a href="https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+ ltr + '.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
                 //corner
                 html+='<tr><td>'+e.data.disp+'</td><td>'+dir+'</td><td>'+codeCustom+'</td><td>'+link+'</td></tr>';
             }
@@ -5111,9 +5133,12 @@ function genOverviewTable(pieces){
                     dir = '&#10003';
                 var code = getPieceCode(e);
                 var codeCustom = getPieceCodeForCustomColor(e);
+                if(typeof codeList[code] !== 'undefined')
+                {
+                    var ltr = codeList[code].ltr;
+                }
 
-
-                var link = '<a href="/ley/uld/'+code.replace("/", "_")+'_LTRevAA.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
+                var link = '<a href="https://ley.etaplighting.com/ley/uld/'+code.replace("/", "_")+ ltr +'.uld" type="application/octet-stream" title="'+code+'_LTRevAA.uld" target="_blank">ULD file (drag &amp; drop)</a>';
                 html+='<tr><td>'+e.data.disp+'</td><td>'+dir+'</td><td>'+codeCustom+'</td><td>'+link+'</td></tr>';
             }
         });
@@ -7854,7 +7879,7 @@ function EveryPointOnCorner(segment)
     out += (centerPointX0 - 560) + ",";
     out += (centerPointY0 + 30);
     out += "\r\n";
-    out += (centerPointX0 + 28) + ",";
+    out += (centerPointX0 + 30) + ",";
     out += (centerPointY0 + 30);
     out += "\r\n";
     out += (centerPointX0 + 30) + ",";
