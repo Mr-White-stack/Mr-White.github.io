@@ -1064,7 +1064,6 @@ table th:nth-child(3), td:nth-child(3) { min-width: 135px; max-width: 135px; }*/
 #submitPanel .disabled button
 {
     cursor: default;
-    opacity: 0.6;
 }
 #submitPanel .popup {
     outline: none;
