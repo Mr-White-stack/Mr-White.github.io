@@ -33,10 +33,10 @@ $(function() {
 	var isEdgeChromium = isChrome && (navigator.userAgent.indexOf("Edg") != -1);
 	
 
-	// if(!isChrome)
-	// {
-	// 	window.alert("Use Chrome or Edge");
-	// }
+	 if(!isChrome)
+	 {
+	 	window.alert("Use Chrome or Edge");
+	 }
 
 
     
