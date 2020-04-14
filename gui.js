@@ -11,6 +11,34 @@ $(function() {
 	current position of fieldset / navigation link
 	*/
 	var current 	= 1;
+
+	var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+	// Firefox 1.0+
+	var isFirefox = typeof InstallTrigger !== 'undefined';
+	
+	// Safari 3.0+ "[object HTMLElementConstructor]" 
+	var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+	
+	// Internet Explorer 6-11
+	var isIE = /*@cc_on!@*/false || !!document.documentMode;
+	
+	// Edge 20+
+	var isEdge = !isIE && !!window.StyleMedia;
+	
+	// Chrome 1 - 79
+	var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+	
+	// Edge (based on chromium) detection
+	var isEdgeChromium = isChrome && (navigator.userAgent.indexOf("Edg") != -1);
+	
+
+	// if(!isChrome)
+	// {
+	// 	window.alert("Use Chrome or Edge");
+	// }
+
+
     
 	/*
 	sum and save the widths of each one of the fieldsets
@@ -995,7 +1023,17 @@ $(function() {
 		// Generate download of 'Ley'----- '-2D-model.scr'  file with some content
 		
 		var auxNameProject = projectDef.project.name;
-		var auxFinalName = auxNameProject.replace(/[ ,]+/g, "_");
+		var auxFinalName
+		if(projectDef.project.room == "")
+		{
+			var d = new Date();
+			var month = 1 + d.getMonth();
+			auxFinalName = "Ley_" + d.getFullYear().toString() + month.toString() + d.getDate().toString() + d.getHours().toString() + d.getMinutes().toString();
+		}
+		else{
+			auxFinalName = auxNameProject.replace(/[ ,]+/g, "_");
+		}
+
 		var auxLineNumberProject = projectDef.project.room;
 		var auxFinalLineNumber = auxLineNumberProject.replace(/[ ,]+/g, "_");
 
@@ -1032,7 +1070,10 @@ $(function() {
 	{
 		if(projectDef.project.room == "")
 		{
-			return "Ley";
+			var d = new Date();
+			var month = 1 + d.getMonth();
+			auxFinalName = "Ley_" + d.getFullYear().toString() + month.toString() + d.getDate().toString() + d.getHours().toString() + d.getMinutes().toString();
+			return auxFinalName;
 		}
 		else
 		{

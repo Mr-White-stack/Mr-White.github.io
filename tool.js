@@ -481,6 +481,7 @@ function setUpDesignMap(){
                     }
                     else{
                         //check if its on an existing segment and that segment it s not connected to a t-piece
+                        intersectingCorner = false;
                         var isonseg = isOnSegment(startPoint);
 
                         if(isonseg.b){
@@ -792,7 +793,9 @@ function setUpDesignMap(){
                     }
                     else{
                         //draw of extended segment
-                        if(!intersectingSeg && !intersectingCorner && !currInt){
+                        var aux = isCorner(startPoint);
+                        var aux2 = isCorner(endPoint);
+                        if(!intersectingSeg && !isCorner(startPoint) && !isCorner(endPoint) && !currInt){
                             if(segsArray.length !== 0){
                                 if(!isOnSegLimit(startPoint).b && !isOnSegLimit(endPoint).b){
                                     //make sure is continuation of existing, or start of new drawing
@@ -806,6 +809,18 @@ function setUpDesignMap(){
                                 }
                             }
                         }
+                        else
+                        {                    
+                            drawShape.destroy();
+                            isDrawing = false;
+                            drawShape = null;
+                            lenShape.visible(false);
+                            lenText.visible(false);
+                            consoleAdd(strings.cannot_draw_to_or_from_corner);
+                            addedSegment = false;
+                            //recalculate
+                            reCalculateDesign();
+                            return;}
                     }
                 }
                 //Intersection on END
@@ -927,7 +942,16 @@ function setUpDesignMap(){
                 //Intersection on START
                 //check if it was corner
                 if(intersectingCorner){
-                    
+                    drawShape.destroy();
+                    isDrawing = false;
+                    drawShape = null;
+                    lenShape.visible(false);
+                    lenText.visible(false);
+                    consoleAdd(strings.cannot_draw_to_or_from_corner);
+                    addedSegment = false;
+                    //recalculate
+                    reCalculateDesign();
+                    return;
                     // var intaux = isOnSegment(startPoint);
                     // if(intaux.b){
                     //     if(intaux.d != drawShape.attrs.dir){
@@ -948,24 +972,6 @@ function setUpDesignMap(){
                     //         }
                     //     }
                     // }
-                    if(isValidSegment(startPoint) !== false){
-                    //intersection on start
-                    tConnArray.push({x:startPoint.x,y:startPoint.y,checked:false});
-                    intersectingCorner = false;
-                    }
-                    else
-                    {
-                        drawShape.destroy();
-                        isDrawing = false;
-                        drawShape = null;
-                        lenShape.visible(false);
-                        lenText.visible(false);
-                        consoleAdd(strings.too_small);
-                        addedSegment = false;
-                        //recalculate
-                        reCalculateDesign();
-                        return;
-                    }
                     ///////////////////////////////// ADD_INTERSECTION
                 }
                 if(currInt)
@@ -3012,6 +3018,14 @@ function getComposition(seg,control,segId){
 
 
             }
+            else if(len == 11856)
+            {
+                comb.push(opticsLen[1][1]);
+                comb.push(opticsLen[1][1]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+                comb.push(opticsLen[1][3]);
+            }
             else{
 
             for(var i=opticsLen[1].length-1; i>=0;i--){
@@ -3955,7 +3969,7 @@ function getPieceCode(p){
     }        
     //LIGHT OUTPUT DIRECT
     if(p.data.dir){
-        if(getOptics().cod == 'S'){
+        if(getOptics().cod == 'S' || getOptics().cod == 'B'){
             out+= 'M'; //for shielded use always medium
         }
         else{
@@ -3967,7 +3981,7 @@ function getPieceCode(p){
     }
     //LIGHT OUTPUT INDIRECT
     if(p.data.ind){
-        if(getOptics().cod == 'S'){
+        if(getOptics().cod == 'S' || getOptics().cod == 'B'){
             out+= 'M'; //for shielded use always medium
         }
         else{
@@ -4043,7 +4057,7 @@ function getPieceCodeForCustomColor(p){
     }        
     //LIGHT OUTPUT DIRECT
     if(p.data.dir){
-        if(getOptics().cod == 'S'){
+        if(getOptics().cod == 'S' || getOptics().cod == 'B'){
             out+= 'M'; //for shielded use always medium
         }
         else{
@@ -4055,7 +4069,7 @@ function getPieceCodeForCustomColor(p){
     }
     //LIGHT OUTPUT INDIRECT
     if(p.data.ind){
-        if(getOptics().cod == 'S'){
+        if(getOptics().cod == 'S' || getOptics().cod == 'B'){
             out+= 'M'; //for shielded use always medium
         }
         else{
@@ -4413,10 +4427,10 @@ function loadOverviewData(){
     $('#number_of_drivers').html(strings.number_of_drivers +': <strong>'+getNumberOfDrivers()+'</strong>');  
     $('#max_drivers').html(strings.max_drivers);  
 
-    var TPF = TotalPowerFactor().toString();
-    var res = TPF.substring(0, 4);
-    $('#tot_power_ft').html(strings.power_factor+': <strong>'+res+' </strong>');
-    var fluxPerMeter = lp.tot/getTotalLen(modules) * 1000;
+    // var TPF = TotalPowerFactor().toString();
+    // var res = TPF.substring(0, 4);
+    // $('#tot_power_ft').html(strings.power_factor+': <strong>'+res+' </strong>');
+     var fluxPerMeter = lp.tot/getTotalLen(modules) * 1000;
 
     if(modules.length){
         $('#tender').html(strings.tender_intro_1 + ifHasUpLight()  + getInstallationTranslation() + getLuminaire() + getOpticsTranslations()+ strings.tender_enec_certified_1 + strings.tender_warranty_1 +
@@ -5646,14 +5660,14 @@ function genProjectSummary(){
     d.text(17,yy,strings.power);
     d.setFontStyle('bold');
     d.text(63,yy, lp.pow.toString()+' W');
-    yy+=5;
-    d.setFontSize(10);
-    d.setFontStyle('normal');
-    d.text(17,yy,strings.power_factor);
-    d.setFontStyle('bold');
-    var TPF = TotalPowerFactor().toString();
-    var res = TPF.substring(0, 4);
-    d.text(63,yy, res);
+    // yy+=5;
+    // d.setFontSize(10);
+    // d.setFontStyle('normal');
+    // d.text(17,yy,strings.power_factor);
+    // d.setFontStyle('bold');
+    // var TPF = TotalPowerFactor().toString();
+    // var res = TPF.substring(0, 4);
+    // d.text(63,yy, res);
     yy+=5;
     d.setFontSize(10);
     d.setFontStyle('normal');
@@ -7033,7 +7047,7 @@ function genInstallationSummary(){
 
     yy+=8
     ins.setFontSize(16);
-    ins.text(17,yy,"Videos to install");
+    ins.text(17,yy,strings.installation_videos);
     yy+=15
     ins.setFontSize(10);
     ins.setFontStyle('normal');
@@ -7054,7 +7068,7 @@ function genInstallationSummary(){
                 ins.setTextColor(0,0,0);
                 yy+=5
             }
-            else if(getOptics().cod == 'S' && getOptics().cod == 'B')
+            else if(getOptics().cod == 'S' || getOptics().cod == 'B')
             {
                 ins.text(17, yy, strings.installation_video_ceiling_shield);
                 yy+=5
@@ -7098,7 +7112,7 @@ function genInstallationSummary(){
             ins.setTextColor(0,0,0);
             yy+=5
         }
-        else if(getOptics().cod == 'S' && getOptics().cod == 'B')
+        else if(getOptics().cod == 'S' || getOptics().cod == 'B')
         {
             ins.text(17, yy, strings.installation_video_suspended_shield);
             yy+=5
@@ -7752,40 +7766,84 @@ function MiddlePointsEverySegment(segment)
 
 function StartPointEverySegment(segment)
 {
-    var initialPointX0 = (segment.data.end.x - segment.data.start.x)/2;
-    var initialPointY0 = (segment.data.end.y - segment.data.start.y)/2;
+    var auxCode = segment.code; 
+    var secondParameter = auxCode.substr(5, 1);
 
-    var middlePointY0 = (segment.data.end.y - initialPointY0)/gridSize*gridSizeInMM;
-    var middlePointX0 = (segment.data.end.x - initialPointX0)/gridSize*gridSizeInMM;
+    if(secondParameter == "0" || secondParameter == "3" ||secondParameter == "1"){
 
-    var length = getSegLength(segment.data);
-    var aux = '';
 
-        aux += (middlePointX0 - 30) + ",";
-        aux += -(middlePointY0 + (length/2));
-        return aux;
+        var initialPointX0 = (segment.data.end.x - segment.data.start.x)/2;
+        var initialPointY0 = (segment.data.end.y - segment.data.start.y)/2;
+
+        var middlePointY0 = (segment.data.end.y - initialPointY0)/gridSize*gridSizeInMM;
+        var middlePointX0 = (segment.data.end.x - initialPointX0)/gridSize*gridSizeInMM;
+
+        var length = getSegLength(segment.data);
+        var aux = '';
+
+            aux += (middlePointX0 - 30) + ",";
+            aux += -(middlePointY0 + (length/2)) - (3/2);
+            return aux;
+    }
+    else{
+        var initialPointX0 = (segment.data.end.x - segment.data.start.x)/2;
+        var initialPointY0 = (segment.data.end.y - segment.data.start.y)/2;
+
+        var middlePointY0 = (segment.data.end.y - initialPointY0)/gridSize*gridSizeInMM;
+        var middlePointX0 = (segment.data.end.x - initialPointX0)/gridSize*gridSizeInMM;
+
+        var length = getSegLength(segment.data);
+        var aux = '';
+
+            aux += (middlePointX0 - 30) + ",";
+            aux += -(middlePointY0 + (length/2));
+            return aux;
+
+    }
+
 }
-
 //Auto-Cad Segments X2Y2
 
 function LastPointEverySegment(segment)
 {
 
-    //distance to middle point
-    var initialPointX0 = (segment.data.end.x - segment.data.start.x)/2;
-    var initialPointY0 = (segment.data.end.y - segment.data.start.y)/2;
+    var auxCode = segment.code; 
+    var secondParameter = auxCode.substr(5, 1);
 
-    var middlePointY0 = (segment.data.end.y - initialPointY0)/gridSize*gridSizeInMM;
-    var middlePointX0 = (segment.data.end.x - initialPointX0)/gridSize*gridSizeInMM;
+    if(secondParameter == "0" || secondParameter == "3" ||secondParameter == "1"){
 
-    var length = getSegLength(segment.data);
-    var aux = '';
+        //distance to middle point
+        var initialPointX0 = (segment.data.end.x - segment.data.start.x)/2;
+        var initialPointY0 = (segment.data.end.y - segment.data.start.y)/2;
+
+        var middlePointY0 = (segment.data.end.y - initialPointY0)/gridSize*gridSizeInMM;
+        var middlePointX0 = (segment.data.end.x - initialPointX0)/gridSize*gridSizeInMM;
+
+        var length = getSegLength(segment.data);
+        var aux = '';
 
 
-    aux += (middlePointX0 +30) + ",";
-    aux += -(middlePointY0 - (length/2));
-    return aux;
+        aux += (middlePointX0 +30) + ",";
+        aux += -(middlePointY0 - (length/2)) + (3/2);
+        return aux;
+    }
+    else
+    {
+        var initialPointX0 = (segment.data.end.x - segment.data.start.x)/2;
+        var initialPointY0 = (segment.data.end.y - segment.data.start.y)/2;
+    
+        var middlePointY0 = (segment.data.end.y - initialPointY0)/gridSize*gridSizeInMM;
+        var middlePointX0 = (segment.data.end.x - initialPointX0)/gridSize*gridSizeInMM;
+    
+        var length = getSegLength(segment.data);
+        var aux = '';
+    
+    
+        aux += (middlePointX0 +30) + ",";
+        aux += -(middlePointY0 - (length/2));
+        return aux;
 
+    }
 }
 //T-Piece Draw
 function EveryPointOnTPiece(segment)
